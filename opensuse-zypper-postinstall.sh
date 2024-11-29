@@ -13,7 +13,7 @@ echo "автор: programmist.nazarov@gmail.com, 2022-2024"
 
 
 fnRepos() {
-	# ---------- KEYS  -----------
+	# ---------- REPOS  -----------
 	echo "ADD NEW REPOS? [Y/N]?"
 	echo "Confirm [Y,n]"
 	read input
@@ -608,6 +608,24 @@ fnVideo(){
 	# --------------------------
 }
 
+fnBackups(){
+	echo "INSTALL BACKUPING SOFTWARE? [Y/N]?"
+	read input
+	if [[ $input == "Y" || $input == "y" ]]; then
+
+		sudo zypper addrepo https://download.opensuse.org/repositories/Archiving:Backup/openSUSE_Tumbleweed/Archiving:Backup.repo
+		sudo zypper refresh
+		sudo zypper install safecopy
+		sudo zypper install fsarchiver
+		sudo zypper install deja-dup
+		sudo zypper install backintime
+
+	else
+			echo "Skipped video player installation"
+	fi
+
+}
+
 fnPasswordTool(){
     # ---------- PASSWORD TOOL -----------
 
@@ -876,7 +894,7 @@ fnBlockAds(){
 
 fnMenuMain(){
 	# Создаем массив с пунктами меню
-	items=("Repos" "Keys" "Zip Tools" "Make Tools" "System Tools" "Networking Tools" "Block Ads" "Proc Freq" "Auto Proc Freq" "Update Grub" "Programming" "Developer Tools" "Mesa" "Video" "Vulkan" "Wine" "Pipewire" "Alsa" "PulseAudio" "Audio Player" "Bluetooth Tools" "Password Tool" "Messengers" "Clear Font Cache" "Security" "Display Manager" "Install DE" "Install Greeters" "Flatpak System" "Flatpak Soft" "Snap" "Tkg Kernel" "XanMod Kernel" "Zen Kernel" "Rng" "Dbus Broker" "Haveged" "Trim SSD" "Quit")
+	items=("Repos" "Keys" "Zip Tools" "Make Tools" "System Tools" "Networking Tools" "Block Ads" "Proc Freq" "Auto Proc Freq" "Update Grub" "Programming" "Developer Tools" "Mesa" "Video" "Vulkan" "Backups" "Wine" "Pipewire" "Alsa" "PulseAudio" "Audio Player" "Bluetooth Tools" "Password Tool" "Messengers" "Clear Font Cache" "Security" "Display Manager" "Install DE" "Install Greeters" "Flatpak System" "Flatpak Soft" "Snap" "Tkg Kernel" "XanMod Kernel" "Zen Kernel" "Rng" "Dbus Broker" "Haveged" "Trim SSD" "Quit")
 
 	# Запускаем цикл для отображения меню
 	while item=$(zenity --title="Выберите пункт меню" --text="Выберите один из пунктов:" --list --column="Options" "${items[@]}")
@@ -926,6 +944,8 @@ fnMenuMain(){
 				fnVideo;;
 			"Vulkan")
 				fnVulkan;;
+			"Backups")
+				fnBackups;;
 			"Wine")
 				fnWine;;
 			"Pipewire")
