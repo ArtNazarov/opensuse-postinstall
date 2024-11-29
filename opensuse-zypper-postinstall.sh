@@ -11,6 +11,13 @@ fi
 echo "Скрипт постустановки для OpenSUSE"
 echo "автор: programmist.nazarov@gmail.com, 2022-2024"
 
+
+fnRepos(){
+	sudo zypper ar -f http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
+	sudo zypper ar -f https://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Tumbleweed/ python
+	sudo zypper ar -f https://packages.microsoft.com/yumrepos/vscode vscode
+	sudo zypper ar -f https://download.teamviewer.com/download/linux/teamviewer.repo teamviewer
+}
  
 fnKeys() {
 	# ---------- KEYS  -----------
@@ -689,7 +696,7 @@ fnMessengers(){
 
 
 # OPTIMIZATIONS
-
+	
 fnAnanicy(){
 	# ---------- ANANICY -----------
 	cd ~
@@ -862,7 +869,7 @@ fnBlockAds(){
 
 fnMenuMain(){
 	# Создаем массив с пунктами меню
-	items=("Keys" "Zip Tools" "Make Tools" "System Tools" "Networking Tools" "Block Ads" "Proc Freq" "Auto Proc Freq" "Update Grub" "Programming" "Developer Tools" "Mesa" "Video" "Vulkan" "Wine" "Pipewire" "Alsa" "PulseAudio" "Audio Player" "Bluetooth Tools" "Password Tool" "Messengers" "Clear Font Cache" "Security" "Display Manager" "Install DE" "Install Greeters" "Flatpak System" "Flatpak Soft" "Snap" "Tkg Kernel" "XanMod Kernel" "Zen Kernel" "Rng" "Dbus Broker" "Haveged" "Trim SSD" "Quit")
+	items=("Repos" "Keys" "Zip Tools" "Make Tools" "System Tools" "Networking Tools" "Block Ads" "Proc Freq" "Auto Proc Freq" "Update Grub" "Programming" "Developer Tools" "Mesa" "Video" "Vulkan" "Wine" "Pipewire" "Alsa" "PulseAudio" "Audio Player" "Bluetooth Tools" "Password Tool" "Messengers" "Clear Font Cache" "Security" "Display Manager" "Install DE" "Install Greeters" "Flatpak System" "Flatpak Soft" "Snap" "Tkg Kernel" "XanMod Kernel" "Zen Kernel" "Rng" "Dbus Broker" "Haveged" "Trim SSD" "Quit")
 
 	# Запускаем цикл для отображения меню
 	while item=$(zenity --title="Выберите пункт меню" --text="Выберите один из пунктов:" --list --column="Options" "${items[@]}")
@@ -872,6 +879,9 @@ fnMenuMain(){
 			"Quit")
 				echo "Quit";
 				break;;
+			"Repos")
+				echo "Adding repos";
+				fnRepos;;
 			"Keys") 
 				echo "Selected Keys";
 				fnKeys;;
