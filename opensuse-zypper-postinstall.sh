@@ -12,11 +12,18 @@ echo "Скрипт постустановки для OpenSUSE"
 echo "автор: programmist.nazarov@gmail.com, 2022-2024"
 
 
-fnRepos(){
-	sudo zypper ar -f http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
-	sudo zypper ar -f https://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Tumbleweed/ python
-	sudo zypper ar -f https://packages.microsoft.com/yumrepos/vscode vscode
-	sudo zypper ar -f https://download.teamviewer.com/download/linux/teamviewer.repo teamviewer
+fnRepos() {
+	# ---------- KEYS  -----------
+	echo "ADD NEW REPOS? [Y/N]?"
+	echo "Confirm [Y,n]"
+	read input
+	if [[ $input == "Y" || $input == "y" ]]; then
+		sudo zypper ar -f http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
+		sudo zypper ar -f https://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Tumbleweed/ python
+		sudo zypper ar -f https://packages.microsoft.com/yumrepos/vscode vscode
+	else
+		echo "skipped adding repos"
+	fi
 }
  
 fnKeys() {
