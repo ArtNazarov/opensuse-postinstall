@@ -26,18 +26,6 @@ fnKeys() {
 	fi
 }
 
-fnMirrorsChange(){
-	# ---------- MIRRORS CHANGE -----------
-	echo "change mirrors ? [Y/N]?"
-	echo "Confirm [Y,n]"
-	read input
-	if [[ $input == "Y" || $input == "y" ]]; then
-		sudo zypper install reflector rsync curl
-		sudo reflector --verbose --country 'Russia' -l 25 --sort rate --save /etc/zypp/repos.d/mirrorlist.repo
-	else
-		echo "skipped mirrors setup"
-	fi
-}
 
 fnZipTools(){
 	# ---------- INSTALL ZIP TOOLS -----------
@@ -45,7 +33,7 @@ fnZipTools(){
 	echo "Confirm [Y,n]"
 	read input
 	if [[ $input == "Y" || $input == "y" ]]; then
-		sudo zypper install lrzip unrar unzip unace p7zip squashfs-tools
+		sudo zypper install lrzip unrar unzip p7zip
 	else
 		echo "skipped unzip setup"
 	fi
@@ -57,7 +45,7 @@ fnMakeTools(){
 	echo "Confirm [Y,n]"
 	read input
 	if [[ $input == "Y" || $input == "y" ]]; then
-		sudo zypper install autoconf gcc automake make git cppdap jsoncpp rhash cmake llvm clang
+		sudo zypper install autoconf gcc automake make git rhash cmake llvm clang
 	else
 		echo "skipped make tools install"
 	fi
@@ -70,7 +58,7 @@ fnSystemTools(){
 	echo "Confirm [Y,n]"
 	read input
 	if [[ $input == "Y" || $input == "y" ]]; then
-		sudo zypper install gvfs ccache grub-customizer mc
+		sudo zypper install gvfs ccache mc
 	else
 		echo "skipped SYSTEM TOOLS install"
 	fi
@@ -83,7 +71,7 @@ fnNetworkingTools(){
 	echo "Confirm [Y,n]"
 	read input
 	if [[ $input == "Y" || $input == "y" ]]; then
-		sudo zypper install wpa_supplicant dhcpd
+		sudo zypper install wpa_supplicant
 		echo "Tuning network manager"
 		sudo systemctl mask NetworkManager-wait-online.service
 	else
@@ -200,7 +188,7 @@ fnMesa(){
 			echo "begin mesa installation"
 			sudo zypper addrepo https://download.opensuse.org/repositories/X11:XOrg/openSUSE_Tumbleweed/X11:XOrg.repo
 			sudo zypper refresh
-			sudo zypper install mesa lib32-mesa
+			sudo zypper install Mesa 
 	else
 			echo "skipped mesa installation"
 	fi
@@ -216,7 +204,7 @@ fnVulkan(){
 			echo "begin vulkan installation"
 			sudo zypper addrepo https://download.opensuse.org/repositories/X11:XOrg/openSUSE_Tumbleweed/X11:XOrg.repo
 			sudo zypper refresh
-			sudo zypper install vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader
+			sudo zypper install vulkan-devel  
 	else
 			echo "skipped vulkan installation"
 	fi
@@ -231,9 +219,9 @@ fnPortProton(){
 	read input
 	if [[ $input == "Y" || $input == "y" ]]; then
 		echo "begin vulkan installation"
-		sudo zypper install mesa lib32-mesa libvulkan1 vulkan-utils mesa-vulkan-drivers libvulkan_radeon lib32-vulkan-radeon
-		sudo zypper install bash icoutils wget bubblewrap zstd cabextract bc tar openssl gamemode desktop-file-utils curl dbus freetype2 gdk-pixbuf2 ttf-font zenity lsb-release nss xorg-xrandr lsof lib32-freetype2 lib32-libgl lib32-gcc-libs lib32-libx11 lib32-libxss lib32-alsa-plugins lib32-libgpg-error lib32-nss lib32-vulkan-driver lib32-gamemode lib32-openssl
-		wget -c "https://github.com/Castro-Fidel/PortWINE/raw/master/portwine_install_script/PortProton_1.0" && sh PortProton_1.0 -rus
+		sudo zypper addrepo https://download.opensuse.org/repositories/home:Boria138:PortProton/openSUSE_Tumbleweed/home:Boria138:PortProton.repo
+		sudo zypper refresh
+		sudo zypper install portproton
 	else
 		echo "skipped amd graphics and portproton installation"
 	fi
@@ -419,7 +407,7 @@ fnAudioPlayer(){
         echo "Beginning installation of audio players..."
 
         # Установка необходимых пакетов
-        sudo zypper install python3-pip foobnix clementine
+        sudo zypper install python3-pip clementine
 
         # Установка библиотеки httpx через pip
         pip3 install httpx
@@ -488,7 +476,7 @@ fnProgramming(){
         echo "Beginning installation of programming languages..."
 
         # Установка необходимых языков программирования
-        sudo zypper install python3 python3-pip ruby nodejs npm kotlin kotlin-native-bin kotlin-language-server kscript ktlint ki-shell-bin detekt-bin rustc rustup
+        sudo zypper install python3 python3-pip ruby nodejs npm rustup
 
         echo "Programming languages installed successfully."
 
@@ -507,7 +495,7 @@ fnDeveloperTools(){
         echo "Beginning installation of developer tools..."
 
         # Установка необходимых инструментов разработчика
-        sudo zypper install github-desktop notepadqq lazarus qtcreator virtualbox code eclipse docker
+        sudo zypper install github-desktop notepadqq lazarus virtualbox eclipse docker
 
         echo "Developer tools installed successfully."
 
@@ -526,7 +514,8 @@ fnFlatpakSystem(){
         echo "Beginning installation of developer tools..."
 
         # Установка необходимых пакетов для Flatpak
-        sudo zypper install packagekit-qt5 flatpak
+        sudo zypper install flatpak
+		sudo zypper install PackageKit 
 
         # Добавление репозитория Flathub
         flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -615,7 +604,7 @@ fnPasswordTool(){
         echo "Installing password tools..."
 
         # Установка KeePassXC и других приложений
-        sudo zypper install keepassxc pass gopass
+        sudo zypper install keepassxc  gopass
 
         echo "Password tools installed successfully."
 
@@ -690,8 +679,8 @@ fnMessengers(){
 
 		# Install Viber and WhatsApp for Linux using Flatpak or other method if available
 		sudo zypper install flatpak  # Ensure Flatpak is installed
-		flatpak install flathub com.viber.voip  # Install Viber via Flatpak
-		flatpak install flathub org.whatsapp.WhatsApp  # Install WhatsApp via Flatpak
+		flatpak install flathub com.viber.Viber
+		flatpak install com.github.eneshecan.WhatsAppForLinux
 
 	else
 		echo "skipped MESSENGERS install"
@@ -873,7 +862,7 @@ fnBlockAds(){
 
 fnMenuMain(){
 	# Создаем массив с пунктами меню
-	items=("Keys" "Change mirrors" "Zip Tools" "Make Tools" "System Tools" "Networking Tools" "Block Ads" "Proc Freq" "Auto Proc Freq" "Update Grub" "Programming" "Developer Tools" "Mesa" "Video" "Vulkan" "Wine" "Pipewire" "Alsa" "PulseAudio" "Audio Player" "Bluetooth Tools" "Password Tool" "Messengers" "Clear Font Cache" "Security" "Display Manager" "Install DE" "Install Greeters" "Flatpak System" "Flatpak Soft" "Snap" "Tkg Kernel" "XanMod Kernel" "Zen Kernel" "Rng" "Dbus Broker" "Haveged" "Trim SSD" "Quit")
+	items=("Keys" "Zip Tools" "Make Tools" "System Tools" "Networking Tools" "Block Ads" "Proc Freq" "Auto Proc Freq" "Update Grub" "Programming" "Developer Tools" "Mesa" "Video" "Vulkan" "Wine" "Pipewire" "Alsa" "PulseAudio" "Audio Player" "Bluetooth Tools" "Password Tool" "Messengers" "Clear Font Cache" "Security" "Display Manager" "Install DE" "Install Greeters" "Flatpak System" "Flatpak Soft" "Snap" "Tkg Kernel" "XanMod Kernel" "Zen Kernel" "Rng" "Dbus Broker" "Haveged" "Trim SSD" "Quit")
 
 	# Запускаем цикл для отображения меню
 	while item=$(zenity --title="Выберите пункт меню" --text="Выберите один из пунктов:" --list --column="Options" "${items[@]}")
@@ -886,9 +875,6 @@ fnMenuMain(){
 			"Keys") 
 				echo "Selected Keys";
 				fnKeys;;
-			"Change mirrors") 
-				echo "Change mirrors";
-				fnMirrorsChange;;
 			"Zip Tools") 
 				echo "Zip Tools";
 				fnZipTools;;
