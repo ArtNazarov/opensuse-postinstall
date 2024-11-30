@@ -1,18 +1,9 @@
 #!/bin/bash
 
-# Проверка, установлен ли zenity
-if ! zypper se -i zenity &> /dev/null; then
-    echo "Zenity не установлен. Устанавливаем..."
-    sudo zypper install zenity
-else
-    echo "Zenity уже установлен."
-fi
+readonly ACT_REPOS=1
 
-echo "Скрипт постустановки для OpenSUSE"
-echo "автор: programmist.nazarov@gmail.com, 2022-2024"
-
-
-fnRepos() {
+fnOnRepos() {
+   
 	# ---------- REPOS  -----------
 	echo "ADD NEW REPOS? [Y/N]?"
 	echo "Confirm [Y,n]"
@@ -24,8 +15,11 @@ fnRepos() {
 	else
 		echo "skipped adding repos"
 	fi
-}
  
+}
+
+readonly ACT_KEYS=2
+
 fnKeys() {
 	# ---------- KEYS  -----------
 	echo "INSTALL KEYS (NEED AWAIT LONG TIME)? [Y/N]?"
@@ -40,8 +34,9 @@ fnKeys() {
 	fi
 }
 
+readonly ACT_ZIPTOOLS=3
 
-fnZipTools(){
+fnZipTools() {
 	# ---------- INSTALL ZIP TOOLS -----------
 	echo "install unzip, unrar etc ? [Y/N]?"
 	echo "Confirm [Y,n]"
@@ -51,9 +46,11 @@ fnZipTools(){
 	else
 		echo "skipped unzip setup"
 	fi
-}	
- 
-fnMakeTools(){
+}
+
+readonly ACT_MAKETOOLS=4 
+
+fnMakeTools() {
 	# ---------- MAKE TOOLS  -----------
 	echo "INSTALL MAKE TOOLS (RECOMMENDED)? [Y/N]?"
 	echo "Confirm [Y,n]"
@@ -65,7 +62,9 @@ fnMakeTools(){
 	fi
 }
 
-fnSystemTools(){
+readonly ACT_SYSTEMTOOLS=5
+
+fnSystemTools() {
 	# ---------- SYSTEM TOOLS  -----------
 
 	echo "INSTALL SYSTEM TOOLS? [Y/N]?"
@@ -77,6 +76,8 @@ fnSystemTools(){
 		echo "skipped SYSTEM TOOLS install"
 	fi
 }
+
+readonly ACT_NETWORKINGTOOLS=6 
 
 fnNetworkingTools(){
 	# -------------NETWORK -------------
@@ -92,8 +93,10 @@ fnNetworkingTools(){
 		echo "skipped networking install"
 	fi
 }
- 
-fnProcFreq(){
+
+readonly ACT_PROCFREQ=7 
+
+fnProcFreq() {
 	# ---------- proc frequency ----------
 	cd ~
 	echo "INSTALL PROC FREQ TOOLS (RECOMMENDED)? [Y/N]?"
@@ -110,6 +113,8 @@ fnProcFreq(){
 	fi
 	cd -
 }
+
+readonly ACT_AUTOPROCFREQ=8
 
 fnAutoProcFreq(){
 	# ---------- auto proc frequency ----------
@@ -129,9 +134,9 @@ fnAutoProcFreq(){
 	cd -
 }
 
-# ---------------------------------------------------------------------
+readonly ACT_UPDATEGRUB=9
 
-fnUpdateGrub(){
+fnUpdateGrub() {
 	# ------------ update grub ------
 	cd ~
 	echo "Update grub (Y if install kernel) [Y/N]?"
@@ -144,8 +149,9 @@ fnUpdateGrub(){
 	fi
 }
 
- 
-fnZenKernel(){
+readonly ACT_ZENKERNEL=10
+
+fnZenKernel() {
 	# ------------ INSTALL ZEN KERNEL ------
 
 	cd ~
@@ -159,7 +165,10 @@ fnZenKernel(){
 	else
 		echo "skipped ZEN KERNEL install"
 	fi
+
 }
+
+readonly ACT_XANMODKERNEL=11
 
 fnXanModKernel(){
 	# ------------ INSTALL XANMOD KERNEL FOR AMD ------
@@ -177,7 +186,9 @@ fnXanModKernel(){
 	fi
 }
 
-fnTkgKernel(){
+readonly ACT_TKGKERNEL=12
+
+fnTkgKernel() {
 	# ------------ INSTALL TKG KERNEL ------
 
 	cd ~
@@ -193,7 +204,9 @@ fnTkgKernel(){
 	fi
 }
 
-fnMesa(){
+readonly ACT_MESA=13
+
+fnMesa() {
 	# ---------- MESA -----------
 
 	echo "INSTALL MESA? [Y/N]?"
@@ -207,7 +220,8 @@ fnMesa(){
 			echo "skipped mesa installation"
 	fi
 }
-# --------------------------
+
+readonly ACT_VULKAN=14 
 
 fnVulkan(){
 	# ---------- VULKAN -----------
@@ -224,6 +238,7 @@ fnVulkan(){
 	fi
 }
 
+readonly ACT_PORTPROTON=15
 
 fnPortProton(){
 	# ---------- PORTPROTON -----------
@@ -241,7 +256,9 @@ fnPortProton(){
 	fi
 }
 
-fnDbusBroker(){
+readonly ACT_DBUSBROKER=16
+
+fnDbusBroker() {
 	# ---------- DBUS BROKER FOR VIDEO -----------
 	cd ~
 	echo "ENABLE DBUS BROKER ? [Y/N]?"
@@ -256,6 +273,7 @@ fnDbusBroker(){
 	cd -
 }
 
+readonly ACT_CLEARFONTCACHE=17
 
 fnClearFontCache(){
 	# ---------- CLEAR FONT CACHE -----------
@@ -274,9 +292,9 @@ fnClearFontCache(){
 	fi
 }
 
-# --------------------------
+readonly ACT_REMPREVCHROMEINSTALL=18
 
-fnRemPrevChromeInstall(){
+fnRemPrevChromeInstall() {
 	# ---------- remove prev google  -----------
 
 	echo "REMOVE PREVIOUS GOOGLE CHROME INSTALLATION? [Y/N]?"
@@ -292,8 +310,9 @@ fnRemPrevChromeInstall(){
 	# --------------------------
 }
 
+readonly ACT_SECURITYTOOLS=19
 
-fnSecurityTools(){
+fnSecurityTools() {
 	# ---------- SECURITY  -----------
 
 	echo "INSTALL SECURITY TOOLS (APPARMOR, FIREJAIL)? [Y/N]?"
@@ -312,8 +331,9 @@ fnSecurityTools(){
 	fi
 }
 
+readonly ACT_BLUETOOTHTOOLS=20
 
-fnBluetoothTools(){
+fnBluetoothTools() {
     # ---------- BLUETOOTH TOOLS -----------
 
     echo "INSTALL BLUETOOTH TOOLS? [Y/N]?"
@@ -332,8 +352,9 @@ fnBluetoothTools(){
     fi
 }
 
+readonly ACT_PULSEAUDIO=21
 
-fnPulseAudio(){
+fnPulseAudio() {
     # ---------- SOUND -----------
 
     echo "INSTALL SOUND TOOLS (PULSEAUDIO)? [Y/N]?"
@@ -366,7 +387,7 @@ fnPulseAudio(){
     fi
 }
 
-# --------------------------
+readonly ACT_PIPEWIRE=22
 
 fnPipewire(){
     # ---------- PIPEWIRE SOUND -----------
@@ -390,7 +411,7 @@ fnPipewire(){
     fi
 }
 
-# --------------------------
+readonly ACT_ALSA=23
 
 fnAlsa(){
     # ---------- ALSA SOUND -----------
@@ -411,7 +432,9 @@ fnAlsa(){
     fi
 }
 
-fnAudioPlayer(){
+readonly ACT_AUDIOPLAYER=24
+
+fnAudioPlayer() {
     # ---------- AUDIO PLAYER -----------
 
     echo "INSTALL AUDIO PLAYERS? [Y/N]?"
@@ -432,6 +455,8 @@ fnAudioPlayer(){
         echo "Skipped audio players install"
     fi
 }
+
+readonly ACT_INTERNETTOOLS=25
 
 fnInternetTools(){
     # ---------- INTERNET TOOLS -----------
@@ -458,9 +483,10 @@ fnInternetTools(){
         echo "Skipped internet tools install"
     fi
 }
- 
 
-fnScreencast(){
+readonly ACT_SCREENCAST=26
+
+fnScreencast() {
     # ---------- SCREENCAST TOOLS -----------
 
     echo "INSTALL SCREENCAST TOOLS? [Y/N]?"
@@ -479,8 +505,9 @@ fnScreencast(){
     fi
 }
 
+readonly ACT_PROGRAMMING=27
 
-fnProgramming(){
+fnProgramming() {
     # ---------- PROGRAMMING LANGUAGES -----------
 
     echo "INSTALL PROGRAMMING LANGUAGES? [Y/N]?"
@@ -499,7 +526,9 @@ fnProgramming(){
     fi
 }
 
-fnDeveloperTools(){
+readonly ACT_DEVELOPERTOOLS=28
+
+fnDeveloperTools() {
     # ---------- DEVELOPER TOOLS -----------
 
     echo "INSTALL DEVELOPER TOOLS? [Y/N]?"
@@ -517,6 +546,8 @@ fnDeveloperTools(){
         echo "Skipped developer tools install"
     fi
 }
+
+readonly ACT_FLATPAKSYSTEM=29
 
 fnFlatpakSystem(){
     # ---------- FLATPAK SYSTEM -----------
@@ -548,9 +579,9 @@ fnFlatpakSystem(){
     fi
 }
 
-# --------------------------
+readonly ACT_FLATPAKSOFT=30
 
-fnFlatpakSoft(){
+fnFlatpakSoft() {
     # ---------- FLATPAK SOFT -----------
 
     echo "INSTALL OFFICE SOFTWARE FROM FLATPAK? [Y/N]?"
@@ -567,9 +598,10 @@ fnFlatpakSoft(){
         echo "Skipped office software install"
     fi
 }
- 
 
-fnSnap(){
+readonly ACT_SNAP=31
+
+fnSnap() {
 	# ---------- SNAP -----------
 
 	echo "INSTALL SNAPD (PACKAGE MANAGER)? [Y/N]?"
@@ -591,7 +623,9 @@ fnSnap(){
 	# --------------------------
 }
 
-fnVideo(){
+readonly ACT_VIDEO=32
+
+fnVideo() {
 	# ---------- VIDEO  -----------
 
 	echo "INSTALL VIDEO PLAYER (VLC)? [Y/N]?"
@@ -608,7 +642,9 @@ fnVideo(){
 	# --------------------------
 }
 
-fnBackups(){
+readonly ACT_BACKUPS=33
+
+fnBackups() {
 	echo "INSTALL BACKUPING SOFTWARE? [Y/N]?"
 	read input
 	if [[ $input == "Y" || $input == "y" ]]; then
@@ -626,7 +662,9 @@ fnBackups(){
 
 }
 
-fnPasswordTool(){
+readonly ACT_PASSWORDTOOL=34
+
+fnPasswordTool() {
     # ---------- PASSWORD TOOL -----------
 
     echo "INSTALL PASSWORD TOOL? [Y/N]?"
@@ -646,8 +684,9 @@ fnPasswordTool(){
     # --------------------------
 }
 
- 
-fnWine(){
+readonly ACT_WINE=35
+
+fnWine() {
     # ---------- WINE -----------
 
     echo "INSTALL WINE? [Y/N]?"
@@ -679,7 +718,9 @@ fnWine(){
         echo "Skipped Wine install"
     fi
     # --------------------------
-} 
+}
+
+readonly ACT_DE=36
 
 fnDe(){
     # ---------- DE ---------
@@ -694,8 +735,9 @@ fnDe(){
     fi
 }
 
+readonly ACT_MESSENGERS=37
 
-fnMessengers(){
+fnMessengers() {
 	# ---------- MESSENGERS -----------
 
 	echo "INSTALL MESSENGERS? [Y/N]?"
@@ -719,9 +761,8 @@ fnMessengers(){
 	fi
 }
 
+readonly ACT_ANANICY=38
 
-# OPTIMIZATIONS
-	
 fnAnanicy(){
 	# ---------- ANANICY -----------
 	cd ~
@@ -743,6 +784,7 @@ fnAnanicy(){
 	cd -
 }
 
+readonly ACT_RNG=39
 
 fnRng(){
 	# ----------- RNG ---------------
@@ -763,6 +805,8 @@ fnRng(){
 	cd -
 }
 
+readonly ACT_HAVEGED=40
+
 fnHaveged(){
 	# ---------- HAVEGED -----------
 	cd ~
@@ -780,7 +824,9 @@ fnHaveged(){
 	cd -
 	# --------------------------
 }
- 
+
+readonly ACT_TRIMSSD=41
+
 fnTrimSSD(){
 	# ---------- TRIM FOR SSD -----------
 	cd ~
@@ -800,6 +846,7 @@ fnTrimSSD(){
 	cd -
 }
 
+readonly ACT_INSTALLGREETERS=42
 
 fnInstallGreeters(){
 	# ---------- install greeters -----------
@@ -817,7 +864,9 @@ fnInstallGreeters(){
 	cd -
 }
 
-fnDisplayManager(){
+readonly ACT_DISPLAYMANAGER=43
+
+fnDisplayManager() {
 	# ---------- choose display manager -----------
 	cd ~
 	echo "INSTALL AND SELECT DM (display managers)? [Y/N]?"
@@ -847,7 +896,9 @@ fnDisplayManager(){
 	cd -
 }
 
-fnInstallDE(){
+readonly ACT_INSTALLDE=44
+
+fnInstallDE() {
 	# ---------- install de -----------
 	cd ~
 	echo "INSTALL AND SELECT DE (desktop enviroment)? [Y/N]?"
@@ -873,7 +924,9 @@ fnInstallDE(){
 	# --------------------------
 }
 
-fnBlockAds(){
+readonly ACT_BLOCKADS=45
+
+fnBlockAds() {
 	# ---------- block ads  -----------
 	cd ~
 	echo "Setup hosts for blocking ads? [Y/N]?"
@@ -890,117 +943,166 @@ fnBlockAds(){
 			echo "skipped hosts install"
 	fi
 }
- 
 
-fnMenuMain(){
-	# Создаем массив с пунктами меню
-	items=("Repos" "Keys" "Zip Tools" "Make Tools" "System Tools" "Networking Tools" "Block Ads" "Proc Freq" "Auto Proc Freq" "Update Grub" "Programming" "Developer Tools" "Mesa" "Video" "Vulkan" "Backups" "Wine" "Pipewire" "Alsa" "PulseAudio" "Audio Player" "Bluetooth Tools" "Password Tool" "Messengers" "Clear Font Cache" "Security" "Display Manager" "Install DE" "Install Greeters" "Flatpak System" "Flatpak Soft" "Snap" "Tkg Kernel" "XanMod Kernel" "Zen Kernel" "Rng" "Dbus Broker" "Haveged" "Trim SSD" "Quit")
-
-	# Запускаем цикл для отображения меню
-	while item=$(zenity --title="Выберите пункт меню" --text="Выберите один из пунктов:" --list --column="Options" "${items[@]}")
-	do
-		# Обрабатываем выбор пользователя
-		case "$item" in
-			"Quit")
-				echo "Quit";
-				break;;
-			"Repos")
-				echo "Adding repos";
-				fnRepos;;
-			"Keys") 
-				echo "Selected Keys";
-				fnKeys;;
-			"Zip Tools") 
-				echo "Zip Tools";
-				fnZipTools;;
-			"Make Tools")
-				echo "Make Tools";
-				fnMakeTools;;
-			"System Tools")
-				echo "System Tools";
-				fnSystemTools;;
-			"Networking Tools")
-				echo "Networking Tools";
-				fnNetworkingTools;;
-			"Block Ads")
-				echo "Block advertisment";
-				fnBlockAds;;
-			"Proc Freq")
-				echo "Proc Freq"
-				fnProcFreq;;
-			"Auto Proc Freq")
-				echo "Auto Proc Freq";
-				fnAutoProcFreq;;
-			"Update Grub")
-				echo "Update Grub";
-				fnUpdateGrub;;
-			"Programming")
-				fnProgramming;;
-			"Developer Tools")
-				fnDeveloperTools;;
-			"Mesa")
-				fnMesa;;
-			"Video")
-				fnVideo;;
-			"Vulkan")
-				fnVulkan;;
-			"Backups")
-				fnBackups;;
-			"Wine")
-				fnWine;;
-			"Pipewire")
-				fnPipewire;;
-			"Alsa")
-				fnAlsa;;
-			"PulseAudio")
-				fnPulseAudio;;
-			"Audio Player")
-				fnAudioPlayer;;
-			"Bluetooth Tools")
-				fnBluetoothTools;;
-			"Password Tool")
-				fnPasswordTool;;
-			"Messengers")
-				fnMessengers;;
-			"Clear Font Cache")
-				fnClearFontCache;;
-			"Security")
-				fnSecurityTools;;
-			"Display Manager")
-				fnDisplayManager;;
-			"Install DE")
-				fnInstallDE;;
-			"Install Greeters")
-				fnInstallGreeters;;
-			"Flatpak System")
-				fnFlatpakSystem;;
-			"Flatpak Soft")
-				fnFlatpakSoft;;
-			"Snap")
-				fnSnap;;
-			"Tkg Kernel")
-				fnTkgKernel;;
-			"XanMod Kernel")
-				fnXanModKernel;;
-			"Zen Kernel")
-				fnZenKernel;;
-			"Rng")
-				fnRng;;
-			"Dbus Broker")
-				fnDbusBroker;;
-			"Haveged")
-				fnHaveged;;
-			"Trim SSD")
-				fnTrimSSD;;
-			
-
-
-
-			
-			*) 
-				echo "Неверный выбор";;
-		esac
-	done
+# Функция диспетчер
+fnSelect() {
+    local i=$1
+    echo "Опция с вариантом $i вызвана!"
+    case $i in
+        $ACT_REPOS)
+            fnOnRepos;;
+        $ACT_KEYS)
+            fnKeys;;
+        $ACT_ZIPTOOLS)
+            fnZipTools;;
+        $ACT_MAKETOOLS)
+            fnMakeTools;;
+        $ACT_SYSTEMTOOLS)
+            fnSystemTools;;
+        $ACT_NETWORKINGTOOLS)
+            fnNetworkingTools;;
+        $ACT_PROCFREQ)
+            fnProcFreq;;
+        $ACT_AUTOPROCFREQ)
+            fnAutoProcFreq;;
+        $ACT_UPDATEGRUB)
+            fnUpdateGrub;;
+        $ACT_ZENKERNEL)
+            fnZenKernel;;
+        $ACT_XANMODKERNEL)
+            fnXanModKernel;;
+        $ACT_TKGKERNEL)
+            fnTkgKernel;;
+        $ACT_MESA)
+            fnMesa;;
+        $ACT_VULKAN)
+            fnVulkan;;
+        $ACT_PORTPROTON)
+            fnPortProton;;
+        $ACT_DBUSBROKER)
+            fnDbusBroker;;
+        $ACT_CLEARFONTCACHE)
+            fnClearFontCache;;
+        $ACT_REMPREVCHROMEINSTALL)
+            fnRemPrevChromeInstall;;
+        $ACT_SECURITYTOOLS)
+            fnSecurityTools;;
+        $ACT_BLUETOOTHTOOLS)
+            fnBluetoothTools;;
+        $ACT_PULSEAUDIO)
+            fnPulseAudio;;
+        $ACT_PIPEWIRE)
+            fnPipewire;;
+        $ACT_ALSA)
+            fnAlsa;;
+        $ACT_AUDIOPLAYER)
+            fnAudioPlayer;;
+        $ACT_INTERNETTOOLS)
+            fnInternetTools;;
+        $ACT_SCREENCAST)
+            fnScreencast;;
+        $ACT_PROGRAMMING)
+            fnProgramming;;
+        $ACT_DEVELOPERTOOLS)
+            fnDeveloperTools;;
+        $ACT_FLATPAKSYSTEM)
+            fnFlatpakSystem;;
+        $ACT_FLATPAKSOFT)
+            fnFlatpakSoft;;
+        $ACT_SNAP)
+            fnSnap;;
+        $ACT_VIDEO)
+            fnVideo;;
+        $ACT_BACKUPS)
+            fnBackups;;
+        $ACT_PASSWORDTOOL)
+            fnPasswordTool;;
+        $ACT_WINE)
+            fnWine;;
+        $ACT_DE)
+            fnDe;;
+        $ACT_MESSENGERS)
+            fnMessengers;;
+        $ACT_ANANICY)
+            fnAnanicy;;
+        $ACT_RNG)
+            fnRng;;
+        $ACT_HAVEGED)
+            fnHaveged;;
+        $ACT_TRIMSSD)
+            fnTrimSSD;;
+        $ACT_INSTALLGREETERS)
+            fnInstallGreeters;;
+        $ACT_DISPLAYMANAGER)
+            fnDisplayManager;;
+        $ACT_INSTALLDE)
+            fnInstallDE;;
+        $ACT_BLOCKADS)
+            fnBlockAds;;
+    esac
 }
- 
-fnMenuMain
+
+# Определяем массив с кортежами (логическое значение, метка)
+options=(
+    "FALSE" "Repos Репозитории 1"
+    "FALSE" "Keys Ключи 2"
+    "FALSE" "Zip Архиваторы 3"
+    "FALSE" "Make Сборка и компиляция 4"
+    "FALSE" "System Системные утилиты 5"
+    "FALSE" "Networking Сетевые программы 6"
+    "FALSE" "CPU Настройка процессора 7"
+    "FALSE" "AutoCPU Автоматическая настройка процессора 8"
+    "FALSE" "Update grub Обновить загрузчик 9"
+    "FALSE" "Zen kernel Ядро zen 10"
+    "FALSE" "XanMod kernel Ядро xanmod 11"
+    "FALSE" "Tkg kernel Ядро tkg 12"
+    "FALSE" "Mesa 13"
+    "FALSE" "Vulkan 14"
+    "FALSE" "PortProton 15"
+    "FALSE" "Dbus broker 16"
+    "FALSE" "Clear font cache Очистить кеш шрифтов 17"
+    "FALSE" "Remove old Chrome Удалить старый профиль Chrome 18"
+    "FALSE" "Security tools Утилиты безопасности 19"
+    "FALSE" "Bluetooth 20"
+    "FALSE" "PulseAudio 21"
+    "FALSE" "PipeWire 22"
+    "FALSE" "Alsa 23"
+    "FALSE" "Audio Player 24"
+    "FALSE" "Internet Tools Утилиты для интернета 25"
+    "FALSE" "Screencast Запись экрана 26"
+    "FALSE" "Programming Программирование 27"
+    "FALSE" "Development tools Утилиты для разработчиков 28"
+    "FALSE" "Flatpak 29"
+    "FALSE" "Flatpak soft 30"
+    "FALSE" "Snap 31"
+    "FALSE" "Video 32"
+    "FALSE" "Backups 33"
+    "FALSE" "Password tool Хранилки паролей 34"
+    "FALSE" "Wine 35"
+    "FALSE" "DE 36"
+    "FALSE" "Messengers Для переписки 37"
+    "FALSE" "Ananicy 38"
+    "FALSE" "Rng 39"
+    "FALSE" "Haveged 40"
+    "FALSE" "Trim SSD 41"
+    "FALSE" "GREETERS 42"
+    "FALSE" "Display manager 43"
+    "FALSE" "Install DE 44"
+    "FALSE" "Block ads Блокировка рекламы 45"
+
+)
+
+# Создаем диалоговое окно с флажками
+selected=$(zenity --list --checklist \
+    --column "Выбор" \
+    --column "Опции" \
+    "${options[@]}")
+
+# Выбираем номера...
+selections=($( echo $selected | grep -o '[0-9]\+'))
+
+echo "Выбранные опции: $selections"
+# вызываем над номерами функцию
+    for number in "${selections[@]}"; do
+    	fnSelect "$number"
+	done
